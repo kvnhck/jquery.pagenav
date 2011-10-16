@@ -29,7 +29,7 @@
 		
 		var i = 1;
 
-		headingcontainter.find("h1,h2,h3,h4,h5,h6,h7").each(function () {
+		headingcontainter.find("h1,h2,h3,h4,h5,h6").each(function () {
 			var headingClass = "heading_for_index_" + i;
 			var indexId = "index_for_heading_" + i;
 
