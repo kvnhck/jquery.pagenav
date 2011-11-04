@@ -1,3 +1,62 @@
-jQuery plugin: PageNav
+----------------------------------------------------------------------------------------------------
+ jQuery plugin: PageNav
+----------------------------------------------------------------------------------------------------
 
-This jQuery plugin makes a page navigation out of the heading (h1, h2, hX, ...) tags on your webpage.
+This jQuery plugin makes a page navigation out of the heading (h1, h2, hX, ...) tags.
+
+-------------------------
+ How to use this plugin:
+-------------------------
+
+$(function() {
+    $("body").pageNav(...options...);
+});
+
+You can narrow the selection of heading tags by selecting the container instead of "body".
+
+----------
+ Options:
+----------
+
+- container (required):
+
+    selector of element where to generate the index in
+
+- insertTopLinkAfterHeading (optional, default: false):
+
+    If true, puts a link after the heading to return back to the index.
+    This link can be customized by using the formatTopLink and insertTopLink options.
+
+- headingClassPrefix (optional, default: "heading_for_index"):
+
+    This class prefix is added to every heading tag treated.
+
+- indexIdPrefix (optional, default: "index_for_heading"):
+
+    This id prefix is used for the generated links in the index.
+
+- scrollTimeout (optional, default: 500):
+
+    If the default itemClicked function is used, this is the timeout (in ms) period used
+    for scrolling to the heading tag after clicking the index item.
+
+- formatItem (optional, function that takes two parameters 'element' and 'indexId'):
+
+    Use this option to customize how a link should be formatted.
+    By default a link is formatted as:
+    <li><a id="index_for_heading_x" href="#">Title in the heading tag</a></li>
+
+- itemClicked (optional, function that takes one parameter 'element'):
+
+    Use this option to override the event when clicking on an item in the index.
+    By default this uses the scrollTo() function and the scrollTimeout.
+
+- formatTopLink (optional, function that takes one parameter 'element'):
+
+    Use this option to customize how the top link should be formatted.
+    By default this link is formatted as: <a href="#">index</a>
+
+- insertTopLink (optional, function that takes two parameters 'element' and 'indexId'):
+
+    Use this option to customize where the top link is positioned.
+    By default it will inserted right after the heading tag.

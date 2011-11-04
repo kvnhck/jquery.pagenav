@@ -5,46 +5,12 @@
 		<meta charset="utf-8" />
 		<title></title>
 		<link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.3.0/bootstrap.min.css">
-		<style>
-			a.toplink {
-				color: inherit;
-			}
-		</style>
 		<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
 		<script type="text/javascript" src="../src/jquery.pagenav.js"></script>
 		<script type="text/javascript">
 			$(function () {
 				$(".span-two-thirds").pageNav({
-					container: "#pageNav",
-					insertTopLinkAfterHeading: true,
-					formatItem: function(element, indexId) {
-						var li = $("<li></li>");
-						
-						$("<a></a>")
-							.attr("id", indexId)
-							.attr("href", "#")
-							.text(element.text())
-							.appendTo(li);
-							
-						return li;
-					},
-					formatTopLink: function(element) {
-						var a = $("<a></a>")
-							.attr("href", "#")
-							.addClass("toplink")
-							.text("top");
-						
-						return $("<span></span>")
-							.addClass("label")
-							.append(a);
-					},
-					insertTopLink: function(element, topLink) {
-						$(element).after(topLink);
-					},
-					itemClicked: function(element) {
-						var x = $(element).offset().top - 10;
-						$("html,body").animate({ scrollTop: x }, 500);
-					}
+					container: "#pageNav"
 				});
 			});
 		</script>

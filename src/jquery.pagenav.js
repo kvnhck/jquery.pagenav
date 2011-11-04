@@ -7,8 +7,17 @@
 
 	var pluginName = 'pageNav';
 	var defaults = {
+			//settings
 			container: "",
-			insertTopLinkAfterHeading: false
+			insertTopLinkAfterHeading: false,
+			headingClassPrefix: "heading_for_index",
+			indexIdPrefix: "index_for_heading",
+			scrollTimeout: 500,
+			//callback functions
+			formatItem: null,
+			formatTopLink: null,
+			insertTopLink: null,
+			itemClicked: null
 		};
 
 	function pageNav(element, options) {
@@ -24,37 +33,56 @@
 		
 		var navcontainer = $(this.options.container);
 		navcontainer.append("<ul></ul>");
+		var navcontainer_ul = navcontainer.find("ul");
 
 		var headingcontainter = $(this.element);
 		
-		var i = 1;
+		var hIndex = 0;
 
 		headingcontainter.find("h1,h2,h3,h4,h5,h6").each(function () {
-			var headingClass = "heading_for_index_" + i;
-			var indexId = "index_for_heading_" + i;
+			hIndex++;
+			
+			var headingClass = root.options.headingClassPrefix + "_" + hIndex;
+			var indexId = root.options.indexIdPrefix + "_" + hIndex;
 
 			//add class to heading
 			$(this).addClass(headingClass);
-				
-			//add link to index after heading
-			if(root.options.insertTopLinkAfterHeading)
-			{
-				$(this).after('<a href="#">index</a>')
-					.click(function() {
-						root.goTo(navcontainer, 1000);
-					});
-			}
-
+			
 			//add list item to index
-			navcontainer.find("ul").append('<li><a href="#" id="' + indexId + '">' + $(this).text() + '</a></li>');
+			if($.isFunction(root.options.itemFormat))
+				navcontainer_ul.append(root.options.itemFormat(this, indexId));
+			else
+				navcontainer_ul.append(root.formatItem(this, indexId));
 				
 			//assign click event
 			$("#" + indexId).click(
 				function () {
-					root.goTo($("." + headingClass), 500);
+					if($.isFunction(root.options.itemClicked)) {
+						root.options.itemClicked($("." + headingClass));
+					}
+					else {
+						root.goTo($("." + headingClass), root.options.scrollTimeout);
+					}
 				});
 
-			i++;
+			//add link to index after heading
+			if(root.options.insertTopLinkAfterHeading)
+			{
+				var topLink = $.isFunction(root.options.formatTopLink)
+					? root.options.formatTopLink(this)
+					: root.formatTopLink(this);
+				
+				if(topLink) {
+					topLink.click(function() {
+							root.goTo(navcontainer, root.options.scrollTimeout);
+						});
+				
+					if($.isFunction(root.options.insertTopLink))
+						root.options.insertTopLink(this, topLink);
+					else
+						$(this).after(topLink);
+				}
+			}
 		});
 	};
 
@@ -62,9 +90,25 @@
 		//scroll
 		var x = element.offset().top - 10;
 		$("html,body").animate({ scrollTop: x }, duration);
-
-		//TODO? - briefly highlight
-		//element.animate({});
+	};
+	
+	pageNav.prototype.formatItem = function(element, indexId)
+	{
+		var li = $("<li></li>");
+						
+		$("<a></a>")
+			.attr("id", indexId)
+			.attr("href", "#")
+			.text($(element).text())
+			.appendTo(li);
+			
+		return li;
+	};
+	
+	pageNav.prototype.formatTopLink = function(element) {
+		return $("<a></a>")
+			.attr("href", "#")
+			.text("index");
 	};
 
 	$.fn[pluginName] = function(options) {
