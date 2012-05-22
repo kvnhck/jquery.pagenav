@@ -49,8 +49,8 @@
 			$(this).addClass(headingClass);
 			
 			//add list item to index
-			if($.isFunction(root.options.itemFormat))
-				navcontainer_ul.append(root.options.itemFormat(this, indexId));
+			if($.isFunction(root.options.formatItem))
+				navcontainer_ul.append(root.options.formatItem(this, indexId));
 			else
 				navcontainer_ul.append(root.formatItem(this, indexId));
 				
